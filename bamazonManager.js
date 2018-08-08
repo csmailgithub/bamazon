@@ -9,11 +9,9 @@ var connection = mysql.createConnection({
 	database: 'bamazon'
 });
 
-// promtManager will present menu options to the manager and trigger appropriate logic
+// promtManager will present menu options to the manager
 function promtManager() {
-	// console.log('___ENTER promtManager___');
-
-	// Prompt the manager to select an option
+	// Prompt the manager
 	inquirer.prompt([
 		{
 			type: 'list',
@@ -81,14 +79,12 @@ function displayInventory() {
 
 	  	console.log("---------------------------------------------------------------------\n");
 
-		// End the database connection
 		connection.end();
 	})
 }
 
 // displayLowInventory will display a list of products with the available quantity below 100
 function displayLowInventory() {
-	// console.log('___ENTER displayLowInventory');
 
 	// Construct the db query string
 	queryStr = 'SELECT * FROM products WHERE stock_quantity < 100';

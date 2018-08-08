@@ -47,38 +47,29 @@ function promptUser() {
 		var queryStr = 'SELECT * FROM products WHERE ?';
 
 		connection.query(queryStr, {item_id: item}, function(err, data) {
-			if (err) throw err;
-
-			// If the user has selected an invalid item ID, data attay will be empty
-			// console.log('data = ' + JSON.stringify(data));
-
-			if (data.length === 0) {
+            if (err) throw err;
+            
+            if (data.length === 0) {
 				console.log('ERROR: Invalid Item ID. Please select a valid Item ID.');
 				displayInventory();
 
 			} else {
 				var productData = data[0];
-
-				// console.log('productData = ' + JSON.stringify(productData));
-				// console.log('productData.stock_quantity = ' + productData.stock_quantity);
-
-				// If the quantity requested by the user is in stock
+				// check to see if their are enough 
 				if (quantity <= productData.stock_quantity) {
 					console.log('Congratulations, the product you requested is in stock! Placing order!');
 
-					// Construct the updating query string
+					// Update query string
 					var updateQueryStr = 'UPDATE products SET stock_quantity = ' + (productData.stock_quantity - quantity) + ' WHERE item_id = ' + item;
-					// console.log('updateQueryStr = ' + updateQueryStr);
+				
 
-					// Update the inventory
+					// Update inventory
 					connection.query(updateQueryStr, function(err, data) {
 						if (err) throw err;
 
 						console.log('Your oder has been placed! Your total is $' + productData.price * quantity);
 						console.log('Thank you for shopping with us!');
-						console.log("\n---------------------------------------------------------------------\n");
-
-						// End the database connection
+                        console.log("\n---------------------------------------------------------------------\n");
 						connection.end();
 					})
 				} else {
@@ -120,7 +111,7 @@ function displayInventory() {
 
 	  	console.log("---------------------------------------------------------------------\n");
 
-	  	//Prompt the user for item/quantity they would like to purchase
+	  	//Prompt the user for item and quantity they want to pruchase
 	  	promptUser();
 	})
 }

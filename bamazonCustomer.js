@@ -43,7 +43,7 @@ function promptUser() {
 		var item = input.item_id;
 		var quantity = input.quantity;
 
-		// Query db to confirm that the given item ID exists in the desired quantity
+		// Query db to confirm that desired item has desired quantity available
 		var queryStr = 'SELECT * FROM products WHERE ?';
 
 		connection.query(queryStr, {item_id: item}, function(err, data) {
@@ -84,18 +84,16 @@ function promptUser() {
 	})
 }
 
-// displayInventory will retrieve the current inventory from the database and output it to the console
+// displayInventory will display the current inventory to the console
 function displayInventory() {
-	// console.log('___ENTER displayInventory___');
 
-	// Construct the db query string
 	queryStr = 'SELECT * FROM products';
 
 	// Make the db query
 	connection.query(queryStr, function(err, data) {
 		if (err) throw err;
 
-		console.log('Existing Inventory: ');
+		console.log('Current Inventory: ');
 		console.log('...................\n');
 
 		var strOut = '';
@@ -116,13 +114,9 @@ function displayInventory() {
 	})
 }
 
-// runBamazon will execute the main application logic
 function runBamazon() {
-	// console.log('___ENTER runBamazon___');
-
-	// Display the available inventory
+	
 	displayInventory();
 }
 
-// Run the application logic
 runBamazon();

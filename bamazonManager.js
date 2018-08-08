@@ -28,7 +28,6 @@ function promtManager() {
 				} else if (val === 'Add New Product') {
 					return 'newProduct';
 				} else {
-					// This case should be unreachable
 					console.log('ERROR: Unsupported operation!');
 					exit(1);
 				}
@@ -44,18 +43,14 @@ function promtManager() {
 		} else if (input.option === 'newProduct') {
 			createNewProduct();
 		} else {
-			// This case should be unreachable
 			console.log('ERROR: Unsupported operation!');
 			exit(1);
 		}
 	})
 }
 
-// displayInventory will retrieve the current inventory from the database and output it to the console
+//  displayInventory will display the current inventory to the console
 function displayInventory() {
-	// console.log('___ENTER displayInventory___');
-
-	// Construct the db query string
 	queryStr = 'SELECT * FROM products';
 
 	// Make the db query
@@ -83,13 +78,11 @@ function displayInventory() {
 	})
 }
 
-// displayLowInventory will display a list of products with the available quantity below 100
+// displayLowInventory will display a list of items with quantity below 100
 function displayLowInventory() {
 
 	// Construct the db query string
 	queryStr = 'SELECT * FROM products WHERE stock_quantity < 100';
-
-	// Make the db query
 	connection.query(queryStr, function(err, data) {
 		if (err) throw err;
 
@@ -129,7 +122,6 @@ function validateInteger(value) {
 
 // validateNumeric makes sure that the user is supplying only positive numbers for their inputs
 function validateNumeric(value) {
-	// Value must be a positive number
 	var number = (typeof parseFloat(value)) === 'number';
 	var positive = parseFloat(value) > 0;
 
@@ -142,9 +134,7 @@ function validateNumeric(value) {
 
 // addInventory will guilde a user in adding additional quantify to an existing item
 function addInventory() {
-	// console.log('___ENTER addInventory___');
-
-	// Prompt the user to select an item
+	
 	inquirer.prompt([
 		{
 			type: 'input',
@@ -161,8 +151,6 @@ function addInventory() {
 			filter: Number
 		}
 	]).then(function(input) {
-		// console.log('Manager has selected: \n    item_id = '  + input.item_id + '\n    additional quantity = ' + input.quantity);
-
 		var item = input.item_id;
 		var addQuantity = input.quantity;
 
@@ -171,25 +159,16 @@ function addInventory() {
 
 		connection.query(queryStr, {item_id: item}, function(err, data) {
 			if (err) throw err;
-
-			// If the user has selected an invalid item ID, data attay will be empty
-			// console.log('data = ' + JSON.stringify(data));
-
 			if (data.length === 0) {
 				console.log('ERROR: Invalid Item ID. Please select a valid Item ID.');
 				addInventory();
 
 			} else {
 				var productData = data[0];
-
-				// console.log('productData = ' + JSON.stringify(productData));
-				// console.log('productData.stock_quantity = ' + productData.stock_quantity);
-
 				console.log('Updating Inventory...');
 
 				// Construct the updating query string
 				var updateQueryStr = 'UPDATE products SET stock_quantity = ' + (productData.stock_quantity + addQuantity) + ' WHERE item_id = ' + item;
-				// console.log('updateQueryStr = ' + updateQueryStr);
 
 				// Update the inventory
 				connection.query(updateQueryStr, function(err, data) {
@@ -208,9 +187,8 @@ function addInventory() {
 
 // createNewProduct will guide the user in adding a new product to the inventory
 function createNewProduct() {
-	// console.log('___ENTER createNewProduct___');
 
-	// Prompt the user to enter information about the new product
+	// Prompt to enter new product information
 	inquirer.prompt([
 		{
 			type: 'input',
